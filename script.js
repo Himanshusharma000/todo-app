@@ -1,9 +1,120 @@
-const $=s=>document.querySelector(s);let tasks=JSON.parse(localStorage.getItem('smartTasks')||'[]');let filter='all';
-function save(){localStorage.setItem('smartTasks',JSON.stringify(tasks))}
-function render(){const q=$('#search').value.toLowerCase();const list=tasks.filter(t=>(filter==='all'||(filter==='active'&&!t.done)||(filter==='completed'&&t.done))&&t.title.toLowerCase().includes(q));$('#taskList').innerHTML=list.map(t=>`<li class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}')"><span class="title">${escapeHtml(t.title)}</span><span class="badge">${t.priority}</span><span class="actions"><button onclick="editTask('${t.id}')">Edit</button><button onclick="deleteTask('${t.id}')">Delete</button></span></li>`).join('');$('#empty').style.display=list.length?'none':'block';const done=tasks.filter(t=>t.done).length;$('#stats').innerHTML=`<span class="stat">Total: <b>${tasks.length}</b></span><span class="stat">Active: <b>${tasks.length-done}</b></span><span class="stat">Completed: <b>${done}</b></span>`}
-function addTask(){const title=$('#taskInput').value.trim();if(!title)return;tasks.unshift({id:crypto.randomUUID(),title,priority:$('#priority').value,done:false});$('#taskInput').value='';save();render()}
-function toggleTask(id){const t=tasks.find(x=>x.id===id);if(t)t.done=!t.done;save();render()}
-function deleteTask(id){tasks=tasks.filter(t=>t.id!==id);save();render()}
-function editTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;const value=prompt('Edit task',t.title);if(value&&value.trim()){t.title=value.trim();save();render()}}
-function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-$('#addBtn').onclick=addTask;$('#taskInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});$('#search').oninput=render;document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()});render();
+const $ = (selector) => document.querySelector(selector);
+
+let tasks = JSON.parse(localStorage.getItem('smartTasks') || '[]');
+let filter = 'all';
+
+function save() {
+  localStorage.setItem('smartTasks', JSON.stringify(tasks));
+}
+
+function render() {
+  const query = $('#search').value.toLowerCase();
+  const list = tasks.filter((task) => {
+    const matchesFilter =
+      filter === 'all' ||
+      (filter === 'active' && !task.done) ||
+      (filter === 'completed' && task.done);
+
+    return matchesFilter && task.title.toLowerCase().includes(query);
+  });
+
+  $('#taskList').innerHTML = list
+    .map(
+      (task) => `
+        <li class="task ${task.done ? 'done' : ''}">
+          <input
+            type="checkbox"
+            ${task.done ? 'checked' : ''}
+            onchange="toggleTask('${task.id}')"
+            aria-label="Mark ${escapeHtml(task.title)} complete"
+          >
+          <span class="title">${escapeHtml(task.title)}</span>
+          <span class="badge">${escapeHtml(task.priority)}</span>
+          <span class="actions">
+            <button type="button" onclick="editTask('${task.id}')">Edit</button>
+            <button type="button" onclick="deleteTask('${task.id}')">Delete</button>
+          </span>
+        </li>
+      `
+    )
+    .join('');
+
+  $('#empty').style.display = list.length ? 'none' : 'block';
+
+  const completed = tasks.filter((task) => task.done).length;
+  $('#stats').innerHTML = `
+    <span class="stat">Total: <b>${tasks.length}</b></span>
+    <span class="stat">Active: <b>${tasks.length - completed}</b></span>
+    <span class="stat">Completed: <b>${completed}</b></span>
+  `;
+}
+
+function addTask() {
+  const title = $('#taskInput').value.trim();
+  if (!title) return;
+
+  tasks.unshift({
+    id: crypto.randomUUID(),
+    title,
+    priority: $('#priority').value,
+    done: false,
+  });
+
+  $('#taskInput').value = '';
+  save();
+  render();
+}
+
+function toggleTask(id) {
+  const task = tasks.find((item) => item.id === id);
+  if (task) task.done = !task.done;
+  save();
+  render();
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter((task) => task.id !== id);
+  save();
+  render();
+}
+
+function editTask(id) {
+  const task = tasks.find((item) => item.id === id);
+  if (!task) return;
+
+  const value = prompt('Edit task', task.title);
+  if (value && value.trim()) {
+    task.title = value.trim();
+    save();
+    render();
+  }
+}
+
+function escapeHtml(value) {
+  return value.replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  })[character]);
+}
+
+$('#addBtn').onclick = addTask;
+$('#taskInput').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') addTask();
+});
+$('#search').oninput = render;
+
+document.querySelectorAll('[data-filter]').forEach((button) => {
+  button.onclick = () => {
+    filter = button.dataset.filter;
+    document.querySelectorAll('[data-filter]').forEach((item) => {
+      item.classList.remove('active');
+    });
+    button.classList.add('active');
+    render();
+  };
+});
+
+render();
