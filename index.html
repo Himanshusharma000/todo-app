@@ -1,24 +1,42 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Smart Task Manager</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main class="app">
-    <header><p class="eyebrow">PRODUCTIVITY</p><h1>Smart Task Manager</h1><p class="muted">Plan work, track priorities and finish what matters.</p></header>
-    <section class="composer">
-      <input id="taskInput" placeholder="What needs to be done?" maxlength="120">
-      <select id="priority"><option value="High">High</option><option value="Medium" selected>Medium</option><option value="Low">Low</option></select>
-      <button id="addBtn">Add task</button>
-    </section>
-    <section class="toolbar"><input id="search" placeholder="Search tasks..."><div class="filters"><button data-filter="all" class="active">All</button><button data-filter="active">Active</button><button data-filter="completed">Completed</button></div></section>
-    <section id="stats" class="stats"></section>
-    <ul id="taskList" class="tasks"></ul>
-    <p id="empty" class="empty">No tasks yet. Add your first task above.</p>
-  </main>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <p class="eyebrow">PRODUCTIVITY</p>
+        <h1>Smart Task Manager</h1>
+        <p class="muted">Plan work, track priorities and finish what matters.</p>
+      </header>
+
+      <section class="composer" aria-label="Add task">
+        <input id="taskInput" placeholder="What needs to be done?" maxlength="120" aria-label="Task title">
+        <select id="priority" aria-label="Task priority">
+          <option value="High">High</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <button id="addBtn" type="button">Add task</button>
+      </section>
+
+      <section class="toolbar" aria-label="Task controls">
+        <input id="search" placeholder="Search tasks..." aria-label="Search tasks">
+        <div class="filters" role="group" aria-label="Task filters">
+          <button data-filter="all" class="active" type="button">All</button>
+          <button data-filter="active" type="button">Active</button>
+          <button data-filter="completed" type="button">Completed</button>
+        </div>
+      </section>
+
+      <section id="stats" class="stats" aria-live="polite"></section>
+      <ul id="taskList" class="tasks" aria-live="polite"></ul>
+      <p id="empty" class="empty">No tasks yet. Add your first task above.</p>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
