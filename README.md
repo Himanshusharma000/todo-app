@@ -1,6 +1,6 @@
 # ✅ Smart Task Manager
 
-A lightweight browser-based task manager built with vanilla HTML, CSS and JavaScript. Tasks persist in the browser through `localStorage`, so the app works without a backend or build step.
+A lightweight browser-based task manager built with vanilla HTML, CSS and JavaScript. Tasks persist in the browser with `localStorage`, so the application works without a backend or build step.
 
 ## ✨ Features
 
@@ -18,7 +18,7 @@ A lightweight browser-based task manager built with vanilla HTML, CSS and JavaSc
 
 ## 🚀 Run Locally
 
-Open `index.html` in any modern browser. No build step is required.
+Open `index.html` in any modern browser. No installation or build step is required.
 
 ## 📁 Project Structure
 
